@@ -6,4 +6,4 @@ run
 	
 clean:
 	rm *~
-	rm *
+	

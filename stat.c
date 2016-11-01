@@ -6,34 +6,25 @@
 #include <time.h>
 #include <string.h>
 
-char* convertSet(int num) {
-  if (num == 7) { return "rwx"; }
-  if (num == 6) { return "rw-"; }
-  if (num == 5) { return "r-x"; }
-  if (num == 4) { return "r--"; }
-  if (num == 3) { return "-wx"; }
-  if (num == 2) { return "-w-"; }
-  if (num == 1) { return "--x"; }
-  return "---";
-}
-
-char numToLs(int octal) {
-  char * ret[9];
-  printf("%s\n", convertSet(octal / 100) );
-  printf("ret %s\n" , ret);
-  strcat(ret, convertSet(octal / 100));
-  printf("ret: %s\n",ret);
-}
-
 int main() {
   struct stat buff;
   stat("stat.c", &buff);
   off_t size = buff.st_size;
   mode_t mode = buff.st_mode;
+  char ret[9];
+  int i;
+  for (i=0; i<9; i++) { ret[i] = '-'; }
+  if (mode & S_IRUSR) { ret[0] = 'r'; }
+  if (mode & S_IWUSR) { ret[1] = 'w'; }
+  if (mode & S_IXUSR) { ret[2] = 'x'; }
+  if (mode & S_IRGRP) { ret[3] = 'r'; }
+  if (mode & S_IWGRP) { ret[4] = 'w'; }
+  if (mode & S_IXGRP) { ret[5] = 'x'; }
+  if (mode & S_IROTH) { ret[6] = 'r'; }
+  if (mode & S_IWOTH) { ret[7] = 'w'; }
+  if (mode & S_IXOTH) { ret[8] = 'x'; }
   time_t timeMod = buff.st_mtime;
-  int statchmod = mode & (S_IRWXU | S_IRWXG | S_IRWXO);
-  numToLs(statchmod);
-  
-  printf("Size: %d bytes\nMode (last 3 digits = owner/group/others): %o\nTime of last change: %s\n", size, statchmod, ctime(&timeMod));
+
+  printf("Size: %d bytes\nMode: %s\nTime of last change: %s\n", size, ret, ctime(&timeMod));
   return 0;
 }

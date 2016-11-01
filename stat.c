@@ -18,10 +18,11 @@ char* convertSet(int num) {
 }
 
 char numToLs(int octal) {
-  char ret[9];
-  printf("%s", convertSet(octal / 100) );
+  char * ret[9];
+  printf("%s\n", convertSet(octal / 100) );
+  printf("ret %s\n" , ret);
   strcat(ret, convertSet(octal / 100));
-  printf("%s",ret);
+  printf("ret: %s\n",ret);
 }
 
 int main() {
